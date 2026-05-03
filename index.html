@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Bradley Wherever You Are</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #dd788e;
+    --surface: rgba(235, 156, 209, 0.815);
+    --glass: rgba(192, 93, 93, 0.767);
+    --border: rgba(134, 4, 84, 0.671);
+    --cream: #e769b5;
+    --muted: rgba(245, 93, 93, 0.45);
+    --amber: #a10505;
+    --violet: #d85da1;
+    --glow-amber: rgba(141, 110, 253, 0.39);
+    --glow-violet: rgba(243, 10, 185, 0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: rgb(37, 2, 48);
+    font-family: 'Syne', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── BOKEH BACKGROUND ─── */
+  .bokeh {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .bokeh span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0;
+    animation: drift linear infinite;
+  }
+  .bokeh span:nth-child(1) { width:320px;height:320px;background:var(--glow-violet);top:10%;left:5%;animation-duration:28s;animation-delay:-4s; }
+  .bokeh span:nth-child(2) { width:220px;height:220px;background:var(--glow-amber);top:60%;left:70%;animation-duration:22s;animation-delay:-10s; }
+  .bokeh span:nth-child(3) { width:260px;height:260px;background:var(--glow-violet);top:35%;left:55%;animation-duration:32s;animation-delay:-16s; }
+  .bokeh span:nth-child(4) { width:180px;height:180px;background:var(--glow-amber);top:80%;left:20%;animation-duration:20s;animation-delay:-8s; }
+  .bokeh span:nth-child(5) { width:300px;height:300px;background:rgba(139,111,168,0.1);top:5%;left:60%;animation-duration:36s;animation-delay:-20s; }
+
+  @keyframes drift {
+    0%   { transform: translateY(0)   translateX(0)   scale(1);   opacity:0; }
+    10%  { opacity: 1; }
+    50%  { transform: translateY(-40px) translateX(20px) scale(1.08); }
+    90%  { opacity: 1; }
+    100% { transform: translateY(0)   translateX(0)   scale(1);   opacity:0; }
+  }
+
+  /* ─── GRAIN ─── */
+  .grain {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  /* ─── LAYOUT ─── */
+  main { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 0 24px 120px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0 60px;
+  }
+
+  .eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(128, 3, 24);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 10vw, 86px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.55s;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgb(36, 1, 36);
+    max-width: 420px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.8s;
+  }
+
+  /* ─── DISTANCE BAR ─── */
+  .distance-bar {
+    margin-top: 56px;
+    padding: 20px 28px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.05s;
+  }
+
+  .loc-block { flex: 1; }
+  .loc-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(36, 1, 36) ;
+    margin-bottom: 4px;
+  }
+  .loc-city {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+  }
+  .loc-time {
+    font-size: 12px;
+    color: rgb(36, 1, 36) ;
+    
+    margin-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .loc-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: rgb(36, 1, 36) ;
+    
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .loc-divider svg { opacity: 0.4; }
+
+  /* ─── SECTION HEADINGS ─── */
+  .section { margin-top: 100px; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(73, 2, 26);
+    margin-bottom: 20px;
+  }
+
+  .section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 32px;
+  }
+
+  /* ─── MOOD BUTTONS ─── */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .mood-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    color: rgb(32, 0, 32);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mood-btn:hover {
+    background: var(--glass);
+    border-color: var(--glow-amber);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(201,147,90,0.12);
+  }
+
+  .mood-btn.active {
+    border-color: var(--glow-amber);
+    background: rgba(201,147,90,0.08);
+  }
+
+  .mood-icon { font-size: 18px; flex-shrink: 0; }
+
+  .mood-response {
+    padding: 24px 28px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--amber);
+    border-radius: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    line-height: 1.65;
+    font-style: italic;
+    color: rgb(36, 1, 36) ;
+    
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .mood-response.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── REASONS JAR ─── */
+  .jar-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    backdrop-filter: blur(12px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .jar-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, var(--glow-violet), transparent 70%);
+    pointer-events: none;
+  }
+
+  .jar-reason {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(36, 1, 36) ;
+    
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    margin-bottom: 28px;
+  }
+
+  .jar-reason.fading {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .jar-btn {
+    background: transparent;
+    border: 1px solid var(--amber);
+    border-radius: 100px;
+    padding: 12px 32px;
+    color: rgb(39, 1, 39);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .jar-btn:hover {
+    background: var(--amber);
+    color: var(--bg);
+    box-shadow: 0 0 24px rgba(103, 47, 136, 0.61);
+  }
+
+  /* ─── SPOTIFY ─── */
+  .spotify-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 64px rgba(74, 19, 100, 0.4);
+  }
+
+  .spotify-wrap iframe { display: block; }
+
+  /* ─── THOUGHTS ─── */
+  .thoughts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .thought {
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.65;
+    font-style: italic;
+    color: rgb(34, 1, 34);
+    opacity: 0;
+    transform: translateX(-12px);
+    animation: slideIn 0.7s ease forwards;
+  }
+
+  .thought:nth-child(1) { animation-delay: 0.1s; }
+  .thought:nth-child(2) { animation-delay: 0.25s; }
+  .thought:nth-child(3) { animation-delay: 0.4s; }
+  .thought:nth-child(4) { animation-delay: 0.55s; }
+
+  /* ─── EASTER EGG ─── */
+  .Shanghai-word {
+    position: relative;
+    cursor: help;
+    color: var(--cream);
+    transition: color 0.3s;
+  }
+
+  .Shanghai-word:hover { color: var(--amber); }
+
+  .Shanghai-word .egg {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(0, 0, 0, 0.993);
+    border: 1px solid var(--amber);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: var(--cream);
+    z-index: 10;
+  }
+
+  .Shanghai-word:hover .egg {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ─── COUNTDOWN ─── */
+  .countdown {
+    margin-top: 100px;
+    padding: 32px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .countdown-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 12vw, 96px);
+    font-weight: 300;
+    color: var(--amber);
+    line-height: 1;
+    display: block;
+  }
+
+  .countdown-unit {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(29, 0, 29);
+    margin-top: 8px;
+    display: block;
+  }
+
+  .countdown-label {
+    margin-top: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: rgb(71, 3, 15);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 24px 60px;
+    font-size: 12px;
+    color: rgba(27, 2, 56, 0.836);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    margin: 0 auto 0;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(18px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity:0; transform:translateX(-12px); }
+    to   { opacity:1; transform:translateX(0); }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity:0; transform:translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in-view { opacity:1; transform:translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media(max-width:520px) {
+    .mood-grid { grid-template-columns: 1fr; }
+    .distance-bar { flex-direction: column; align-items: flex-start; }
+    .loc-divider { flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bokeh" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="eyebrow">Built with intention. Made For Bradley</p>
+
+    <h1>
+      A space<br>
+      that's <em>only</em><br>
+      ours.
+    </h1>
+
+    <p class="subtitle">
+      Across the hours that separate us, this spot is basically just a low-key love letter nothing flashy or dramatic(⁠◍⁠•⁠ᴗ⁠•⁠◍⁠)⁠❤️.
+    </p>
+
+    <!-- DISTANCE BAR -->
+    <div class="distance-bar">
+      <div class="loc-block">
+        <div class="loc-label">You, here</div>
+        <div class="loc-city">My End</div>
+        <div class="loc-time" id="myTime">—</div>
+      </div>
+
+      <div class="loc-divider">
+        <svg width="40" height="12" viewBox="0 0 40 12" fill="none">
+          <path d="M0 6h36M30 1l6 5-6 5" stroke="#e8e0d4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span style="font-size:10px;letter-spacing:0.1em;">↔️</span>
+        <svg width="40" height="12" viewBox="0 0 40 12" fill="none">
+          <path d="M40 6H4M10 1L4 6l6 5" stroke="#e8e0d4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="loc-block" style="text-align:right">
+        <div class="loc-label">You, 
+          <span class="Shanghai-word">Shanghai
+            <span class="egg">✦ my favourite part of the world lately♡⁠(⁠˃͈⁠ ⁠દ⁠ ⁠˂͈⁠ ⁠༶⁠ ⁠)</span>
+          </span>
+        </div>
+        <div class="loc-city">Shanghai</div>
+        <div class="loc-time" id="hisTime">—</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOOD -->
+  <section class="section reveal">
+    <p class="section-label"> Check in</p>
+    <h2>How are you feeling<br><em>right now?</em></h2>
+
+    <div class="mood-grid">
+      <button class="mood-btn" onclick="setMood('tired')">
+        <span class="mood-icon">🌙</span> Tired
+      </button>
+      <button class="mood-btn" onclick="setMood('proud')">
+        <span class="mood-icon">✨</span> Proud
+      </button>
+      <button class="mood-btn" onclick="setMood('overthinking')">
+        <span class="mood-icon">🌀</span> Overthinking
+      </button>
+      <button class="mood-btn" onclick="setMood('good')">
+        <span class="mood-icon">☀️</span> Good
+      </button>
+      <button class="mood-btn" onclick="setMood('missing')">
+        <span class="mood-icon">🌍</span> Missing you
+      </button>
+      <button class="mood-btn" onclick="setMood('bored')">
+        <span class="mood-icon">┐⁠(⁠ ⁠˘⁠_⁠˘⁠)⁠┌</span> bored
+      </button>
+    </div>
+
+    <div class="mood-response" id="moodResponse"></div>
+  </section>
+
+  <!-- REASONS JAR -->
+  <section class="section reveal">
+    <p class="section-label">The jar</p>
+    <h2>Reasons I enjoy<br><em>talking to you</em></h2>
+
+    <div class="jar-card">
+      <div class="jar-reason" id="jarReason">
+      THESE ARE FOR YOU, PRESS THE BUTTON.
+      </div>
+      <button class="jar-btn" onclick="nextReason()">
+        ✦ &nbsp; Give me one
+      </button>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section class="section reveal">
+    <p class="section-label">The playlist</p>
+    <h2>Songs <br><em>I might be listening to rn</em></h2>
+
+    <div class="spotify-wrap">
+      
+      <iframe
+        style="border-radius:0"
+        src="https://open.spotify.com/embed/playlist/6GvH37b2iugJYHXxQxXIX2?si=8oCRmJ0jSJGo0hMG-j3qXA"
+      
+        width="100%"
+        height="380"
+        frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  
+  <section class="section reveal">
+    <p class="section-label">Fragments</p>
+    <h2>Things I think about<br><em>randomly</em></h2>
+
+    <div class="thoughts-list" id="thoughts"></div>
+  </section>
+
+  
+  <div class="countdown reveal" id="countdown">
+    <span class="countdown-number" id="dayCount">—</span>
+    <span class="countdown-unit">days</span>
+    <p class="countdown-label">since we first started talking properly.</p>
+  </div>
+
+</main>
+
+<footer>
+  NDINOKUDAℹ️ 🖱️ 👦 💻 ➕ ❤️ 😍
+</footer>
+
+<script>
+// ─── CONFIG — EDIT THESE ───────────────────────────────────────────
+const CONFIG = {
+  myTimezone:    'Africa/Harare',         
+  hisTimezone:   'Asia/Shanghai',
+  startDate:     '2025-09-26',  
+};
+
+const MOODS = {
+  tired: "Pray the rest. Matthew 11:28-30",
+  proud: "I'm genuinely not surprised, you're the kind of person who quietly exceeds every expectation. I hope you let yourself sit in that for a moment.",
+  overthinking: "Hey. Come back to right now. You're safe. Everything you're spinning in your head — it can wait. You don't have to solve it tonight.Phillipians 4:6-7",
+  good: "Hold onto that. I love when the day actually lets you breathe.",
+  missing: "Same. There's this strange thing where the distance feels like proof that this matters. I think about you everyday.",
+  bored:"Watch something fun, tell me about it tommorow. PS Give BAKI a kiss for me♡⁠(⁠>⁠ ⁠ਊ⁠ ⁠<⁠)⁠♡",
+};
+
+const REASONS = [
+  "When we talk it's never the obvious answer, always the interesting one.(⁠◕⁠દ⁠◕⁠)",
+  "You're honest without being harsh. (⁠/⁠^⁠-⁠^⁠(⁠^⁠ ⁠^⁠*⁠)⁠/",
+  "How you laugh. ",
+  "You remember things I mention in passing.",
+  "The fact that you push back when you disagree. I'd rather have that than easy agreement.",
+  "You're curious about things outside your world. That's everything.",
+  "You're kinder to other people than you think you are.",
+  "The 2 hr versions of our conversations. Unfiltered and real.",
+  "How much you care, even when you're trying not to show it.",
+  "That you're still here, reading this. That means something.",
+];
+
+const THOUGHTS = [
+  "I keep a mental tab open of zvinhu zvese zvandichakuudza when i finaly meet you.",
+  "You've made me think differently about a lot of things I thought I'd figured out.",
+  "Zvino feeler sei, to look straight into your eyes.",
+  "I wonder what our conversations would sound like in the same room.",
+];
+
+// ─── CLOCK ────────────────────────────────────────────────────────
+function updateClocks() {
+  const now = new Date();
+  const fmt = (tz) => new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: true, timeZone: tz
+  }).format(now);
+
+  document.getElementById('myTime').textContent  = fmt(CONFIG.myTimezone);
+  document.getElementById('hisTime').textContent = fmt(CONFIG.hisTimezone);
+}
+
+updateClocks();
+setInterval(updateClocks, 1000);
+
+// ─── MOOD ──────────────────────────────────────────────────────────
+function setMood(key) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  const box = document.getElementById('moodResponse');
+  box.classList.remove('visible');
+
+  setTimeout(() => {
+    box.textContent = MOODS[key];
+    box.classList.add('visible');
+  }, 250);
+}
+
+// ─── REASONS JAR ──────────────────────────────────────────────────
+let lastReason = -1;
+
+function nextReason() {
+  const el = document.getElementById('jarReason');
+  el.classList.add('fading');
+
+  setTimeout(() => {
+    let idx;
+    do { idx = Math.floor(Math.random() * REASONS.length); } while (idx === lastReason);
+    lastReason = idx;
+    el.textContent = REASONS[idx];
+    el.classList.remove('fading');
+  }, 400);
+}
+
+// ─── THOUGHTS ──────────────────────────────────────────────────────
+const container = document.getElementById('thoughts');
+// Show random 4 thoughts (can repeat from the array)
+const shown = [...THOUGHTS].sort(() => Math.random() - 0.5).slice(0, 4);
+shown.forEach(t => {
+  const div = document.createElement('div');
+  div.className = 'thought';
+  div.textContent = `"${t}"`;
+  container.appendChild(div);
+})
+
+// ─── COUNTDOWN ─────────────────────────────────────────────────────
+function updateCountdown() {
+  const start = new Date(CONFIG.startDate);
+  const now   = new Date();
+  const diff  = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  document.getElementById('dayCount').textContent = diff > 0 ? diff : '0';
+}
+
+updateCountdown();
+
+// ─── SCROLL REVEAL ─────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
